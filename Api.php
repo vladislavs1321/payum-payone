@@ -113,7 +113,8 @@ class Api
         }
 
         $this->options = $options;
-        $this->client = $client ?: HttpClientFactory::create();
+
+        $this->client = new \GuzzleHttp\Client(['base_uri' => $this->getApiEndpoint()]);
     }
 
     /**
@@ -207,7 +208,7 @@ class Api
             // "aid" may not be passed for getfile requests
             $fields['aid'] = $this->options['sub_account_id'];
         }
-        $fields['api_version'] = '3.9';
+        $fields['api_version'] = '3.10';
         $fields['mode'] = $this->options['sandbox'] ? 'test' : 'live';
         $fields['encoding'] = 'UTF-8';
         $fields['solution_name'] = static::SOLUTION_NAME;
@@ -264,9 +265,8 @@ class Api
             throw new InvalidArgumentException('Field "narrative_text" must not be longer than ' . $narrativeTextMaxLength . ' characters.');
         }
 
-        $request = new Request('POST', $this->getApiEndpoint(), $headers, http_build_query($fields));
 
-        $response = $this->client->send($request);
+        $response = $this->client->post('post-gateway/', ['form_params' => $fields]);
 
         if (false === ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
             throw HttpException::factory($request, $response);
@@ -300,6 +300,6 @@ class Api
      */
     protected function getApiEndpoint()
     {
-        return 'https://api.pay1.de/post-gateway/';
+        return 'https://api.pay1.de/';
     }
 }
