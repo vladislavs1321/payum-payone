@@ -1,5 +1,5 @@
 {
-    "name": "valiton/payum-payone",
+    "name": "vladislavs1321/payum-payone",
     "description": "The Payum extension. It provides PAYONE payment integration.",
     "keywords": ["payum", "payone", "payment", "psp"],
     "license": "MIT",
